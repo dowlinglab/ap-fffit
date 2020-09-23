@@ -46,7 +46,7 @@ def simulation_complete(job):
 @flow.cmd
 def simulate(job):
     """Run the lammps simulation!"""
-    return "mpirun -np 2 lmp_intel_gmt -pk intel 0 omp 1 lrt yes -sf intel -in in.lammps"
+    return "mpirun -np 2 lmp_intel_gmt -pk intel 0 omp 1 lrt yes -sf intel -screen log.stdout -in in.lammps"
 
 
 @Project.operation
