@@ -41,6 +41,7 @@ def simulation_complete(job):
 @Project.pre.after(create_data)
 @Project.pre.after(create_input)
 @Project.post(simulation_complete)
+@directives(np=2)
 @flow.with_job
 @flow.cmd
 def simulate(job):
