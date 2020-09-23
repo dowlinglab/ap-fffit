@@ -1,0 +1,11 @@
+
+*.pyc
+*.rc
+workspace/
+*.o*
+*html
+.bundles/
+signac_project_document.json
+*.ipynb_checkpoints
+*.egg-info*
+*DS_Store
