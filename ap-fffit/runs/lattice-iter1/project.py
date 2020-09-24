@@ -41,12 +41,12 @@ def simulation_complete(job):
 @Project.pre.after(create_data)
 @Project.pre.after(create_input)
 @Project.post(simulation_complete)
-@directives(np=2)
+@directives(np=4)
 @flow.with_job
 @flow.cmd
 def simulate(job):
     """Run the lammps simulation!"""
-    return "mpirun -np 2 lmp_intel_gmt -pk intel 0 omp 1 lrt yes -sf intel -screen log.stdout -in in.lammps"
+    return "mpirun -np 4 lmp_intel_gmt -pk intel 0 omp 1 no_affinity -sf intel -screen log.stdout -in in.lammps"
 
 
 @Project.operation

@@ -10,7 +10,7 @@
 
 module purge
 module load ompi
-export KMP_AFFINITY=none
+export KMP_AFFINITY=verbose,none
 export KMP_BLOCKTIME=0
 export PATH=/afs/crc.nd.edu/group/maginn/group_members/Garrett_Tow/:${PATH}
 
