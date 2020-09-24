@@ -30,7 +30,15 @@ def create_input(job):
 
 
 @Project.label
-def simulation_complete(job):
+def equil_complete(job):
+    if job.isfile("log.prod"):
+        return True
+    else:
+        return False
+
+
+@Project.label
+def prod_complete(job):
     if job.isfile("final.rst"):
         return True
     else:
@@ -40,7 +48,7 @@ def simulation_complete(job):
 @Project.operation
 @Project.pre.after(create_data)
 @Project.pre.after(create_input)
-@Project.post(simulation_complete)
+@Project.post(prod_complete)
 @directives(np=4)
 @flow.with_job
 @flow.cmd
