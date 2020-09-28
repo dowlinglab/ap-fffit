@@ -1,14 +1,14 @@
 import numpy as np
 import unyt as u
 
+
 class APConstants:
     """Experimental data and other constants for Ammonium Perchlorate"""
     def __init__(self):
         assert (
-            self.expt_liq_density.keys()
-            == self.expt_vap_density.keys()
-            == self.expt_Pvap.keys()
-            == self.expt_Hvap.keys()
+            self.expt_lattice_a.keys()
+            == self.expt_lattice_b.keys()
+            == self.expt_lattice_c.keys()
         )
 
     @property
@@ -59,6 +59,9 @@ class APConstants:
                 [0.02, 0.3],   # O
             ]
         )
+
+        bounds = np.vstack((bounds_sigma, bounds_epsilon))
+        return bounds
 
 
     @property
@@ -148,3 +151,4 @@ class APConstants:
         bounds = np.asarray([lower_bound, upper_bound], dtype=np.float32)
         return bounds
 
+AP = APConstants()
