@@ -70,7 +70,7 @@ def calculate_lattice_parameters(job):
 
     import numpy as np
     import lammps_thermo
-    from block_average import block_average
+    from block_average import estimate_variance
 
     n_unitcell_x = 6
     n_unitcell_y = 9
@@ -78,9 +78,9 @@ def calculate_lattice_parameters(job):
 
     # Load the thermo data
     thermo = lammps_thermo.load(job.fn("log.prod"))
-    lx = thermo.prop("lx") / n_unitcell_x
-    ly = thermo.prop("ly") / n_unitcell_y
-    lz = thermo.prop("lz") / n_unitcell_z
+    lx = thermo.prop("Lx") / n_unitcell_x
+    ly = thermo.prop("Ly") / n_unitcell_y
+    lz = thermo.prop("Lz") / n_unitcell_z
 
     # Save averages
     job.doc.a = np.mean(lx)
@@ -88,12 +88,12 @@ def calculate_lattice_parameters(job):
     job.doc.c = np.mean(lz)
 
     # Compute an approx uncertainty with block averaging and save
-    (means_est, vars_est, vars_err) = block_average(lx)
-    job.doc.a_unc = np.max(np.sqrt(vars_est))
-    (means_est, vars_est, vars_err) = block_average(ly)
-    job.doc.b_unc = np.max(np.sqrt(vars_est))
-    (means_est, vars_est, vars_err) = block_average(lz)
-    job.doc.c_unc = np.max(np.sqrt(vars_est))
+    var, var_err = estimate_variance(lx)
+    job.doc.a_unc = np.sqrt(var)
+    var, var_err = estimate_variance(ly)
+    job.doc.b_unc = np.sqrt(var)
+    var, var_err = estimate_variance(lz)
+    job.doc.c_unc = np.sqrt(var)
 
 
 #####################################################################
