@@ -116,7 +116,7 @@ def main():
     filtered.drop(index=new_points.index, inplace=True)
     filtered = filtered.sort_values("mean_mse")
 
-    distance = 0.75
+    distance = 0.7977
     discarded_points = pd.DataFrame(columns=filtered.columns)
     np.random.seed(distance_seed)
 
