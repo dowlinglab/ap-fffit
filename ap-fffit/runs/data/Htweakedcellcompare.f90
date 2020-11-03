@@ -22,6 +22,7 @@ REAL (KIND = rk8), DIMENSION (8, 3) :: PC_Sim
 REAL (KIND = rk8), ALLOCATABLE, DIMENSION (:, :, :) :: Coords !atom info
 REAL (KIND = rk8), ALLOCATABLE, DIMENSION (:, :, :) :: Box !box size info
 CHARACTER filename1*40, filename2*40
+CHARACTER element*2
 
 NH (1) = 1.028
 NH (2) = 1.058
@@ -241,7 +242,21 @@ WRITE (10, *)
 
 DO i = 1, n_atom_uc
 
-  WRITE (10, *) INT (Coords (5, 1, i)), UC_Expt (i, 1:3)
+  SELECT CASE (INT(Coords(5,1,i)))
+  CASE(1)
+    element = "Cl"
+  CASE(2)
+    element = "H"
+  CASE(3)
+    element = "N"
+  CASE(4)
+    element = "O"
+  CASE DEFAULT
+    WRITE(*, *) "Invalid atom type: ", Coords(5,1,i),". Exiting."
+    CALL EXIT(1)
+  END SELECT
+
+  WRITE (10, *) element, UC_Expt (i, 1:3)
 
 END DO
 
@@ -252,7 +267,21 @@ WRITE (10, *)
 
 DO i = 1, n_atom_pc
 
-  WRITE (10, *) INT (Coords (5, 1, i)), PC_Expt (i, 1:3)
+  SELECT CASE (INT(Coords(5,1,i)))
+  CASE(1)
+    element = "Cl"
+  CASE(2)
+    element = "H"
+  CASE(3)
+    element = "N"
+  CASE(4)
+    element = "O"
+  CASE DEFAULT
+    WRITE(*, *) "Invalid atom type: ", Coords(5,1,i),". Exiting."
+    CALL EXIT(1)
+  END SELECT
+
+  WRITE (10, *) element, PC_Expt (i, 1:3)
 
 END DO
 
@@ -419,16 +448,42 @@ WRITE (40, *) n_atom_pc
 WRITE (40, *)
 
 DO i = 1, n_atom_uc
+  SELECT CASE (INT(Coords(5,1,i)))
+  CASE(1)
+    element = "Cl"
+  CASE(2)
+    element = "H"
+  CASE(3)
+    element = "N"
+  CASE(4)
+    element = "O"
+  CASE DEFAULT
+    WRITE(*, *) "Invalid atom type: ", Coords(5,1,i),". Exiting."
+    CALL EXIT(1)
+  END SELECT
 
-  WRITE (20, *) INT (Coords (5, 1, i)), UC_Sim (i, :)
-  WRITE (30, *) INT (Coords (5, 1, i)), (UC_Expt (i, :) - UC_Sim (i, :)) ** 2
+  WRITE (20, *) element, UC_Sim (i, :)
+  WRITE (30, *) element, (UC_Expt (i, :) - UC_Sim (i, :)) ** 2
 
 END DO
 
 DO i = 1, n_atom_pc
+  SELECT CASE (INT(Coords(5,1,i)))
+  CASE(1)
+    element = "Cl"
+  CASE(2)
+    element = "H"
+  CASE(3)
+    element = "N"
+  CASE(4)
+    element = "O"
+  CASE DEFAULT
+    WRITE(*, *) "Invalid atom type: ", Coords(5,1,i),". Exiting."
+    CALL EXIT(1)
+  END SELECT
 
-  WRITE (40, *) INT (Coords (5, 1, i)), PC_Sim (i, :)
-  WRITE (50, *) INT (Coords (5, 1, i)), (PC_Expt (i, :) - PC_Sim (i, :)) ** 2
+  WRITE (40, *) element, PC_Sim (i, :)
+  WRITE (50, *) element, (PC_Expt (i, :) - PC_Sim (i, :)) ** 2
 
 END DO
 
