@@ -437,9 +437,9 @@ PC_Sim (:, 1) = PC_Sim (:, 1) / REAL (PC_Sym (:))
 PC_Sim (:, 2) = PC_Sim (:, 2) / REAL (PC_Sym (:))
 PC_Sim (:, 3) = PC_Sim (:, 3) / REAL (PC_Sym (:))
 
-OPEN (UNIT = 20, FILE = 'Sim_UC.txt', STATUS = 'UNKNOWN')
+OPEN (UNIT = 20, FILE = 'Sim_UC.xyz', STATUS = 'UNKNOWN')
 OPEN (UNIT = 30, FILE = 'Residuals_UC.txt', STATUS = 'UNKNOWN')
-OPEN (UNIT = 40, FILE = 'Sim_PC.txt', STATUS = 'UNKNOWN')
+OPEN (UNIT = 40, FILE = 'Sim_PC.xyz', STATUS = 'UNKNOWN')
 OPEN (UNIT = 50, FILE = 'Residuals_PC.txt', STATUS = 'UNKNOWN')
 
 WRITE (20, *) n_atom_uc
