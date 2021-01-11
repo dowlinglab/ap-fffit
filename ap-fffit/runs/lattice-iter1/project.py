@@ -96,6 +96,15 @@ def calculate_lattice_parameters(job):
     job.doc.c_unc = np.sqrt(var)
 
 
+@Project.operation
+@Project.pre.after(simulate)
+@Project.post.isfile("Sim_PC.txt")
+@flow.with_job
+@flow.cmd
+def calculate_primitive_cell(job):
+    return "../../../data/calcHtweakedcell"
+
+
 #####################################################################
 ################# HELPER FUNCTIONS BEYOND THIS POINT ################
 #####################################################################
