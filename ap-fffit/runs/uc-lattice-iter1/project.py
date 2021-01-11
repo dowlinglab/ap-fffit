@@ -104,7 +104,7 @@ def calculate_lattice_parameters(job):
 def calculate_hbond_hangle(job):
     """Calculate hydrogen bond lengths and angles"""
 
-    return "../../../codes/calcHbond"
+    return "../../../codes/calc_hbond_hangle"
 
 
 @Project.operation
