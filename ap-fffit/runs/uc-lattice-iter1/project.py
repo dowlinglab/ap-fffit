@@ -109,14 +109,14 @@ def calculate_hbond_hangle(job):
 
 @Project.operation
 @Project.pre.after(calculate_hbond_hangle)
-@Project.post(lambda job: "HBond1" in job.doc)
-@Project.post(lambda job: "HBond2" in job.doc)
-@Project.post(lambda job: "HBond3" in job.doc)
-@Project.post(lambda job: "HBond4" in job.doc)
-@Project.post(lambda job: "HAngle1" in job.doc)
-@Project.post(lambda job: "HAngle2" in job.doc)
-@Project.post(lambda job: "HAngle3" in job.doc)
-@Project.post(lambda job: "HAngle4" in job.doc)
+@Project.post(lambda job: "HBond1" in job.doc or job.sp.T > 10.0)
+@Project.post(lambda job: "HBond2" in job.doc or job.sp.T > 10.0)
+@Project.post(lambda job: "HBond3" in job.doc or job.sp.T > 10.0)
+@Project.post(lambda job: "HBond4" in job.doc or job.sp.T > 10.0)
+@Project.post(lambda job: "HAngle1" in job.doc or job.sp.T > 10.0)
+@Project.post(lambda job: "HAngle2" in job.doc or job.sp.T > 10.0)
+@Project.post(lambda job: "HAngle3" in job.doc or job.sp.T > 10.0)
+@Project.post(lambda job: "HAngle4" in job.doc or job.sp.T > 10.0)
 def save_hbond_hangle_data(job):
     """Extract the Hbond lengths and angles into job.doc. Only computed at 10 K"""
 
@@ -147,8 +147,8 @@ def save_hbond_hangle_data(job):
 
 @Project.operation
 @Project.pre.after(simulate)
-@Project.post.isfile("Residuals_UC_tweaked.txt")
-@Project.post.isfile("Residuals_PC_tweaked.txt")
+@Project.post.isfile("Residuals_UC.txt")
+@Project.post.isfile("Residuals_PC.txt")
 @flow.with_job
 @flow.cmd
 def calculate_tweaked_uc_pc(job):
