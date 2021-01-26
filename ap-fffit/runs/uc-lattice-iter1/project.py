@@ -154,7 +154,7 @@ def save_hbond_hangle_data(job):
 def calculate_tweaked_uc_pc(job):
     """Calculate unit cell and primitive cell coordinates with tweaked Hydrogen coordinates"""
 
-    return "../../../codes/calc_htweaked_uc_pc"
+    return "../../../codes/calc_htweaked_pc_uc"
 
 
 #####################################################################
