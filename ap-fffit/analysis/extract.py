@@ -12,7 +12,7 @@ def main():
     else:
         iternum = sys.argv[1]
 
-    run_path = "/scratch365/rdefever/ap-fffit/ap-fffit/runs/"
+    run_path = "/scratch365/bbefort/ap-fffit/ap-fffit/runs/"
     itername = "uc-lattice-iter" + str(iternum)
     project_path = run_path + itername
     csv_name = "csv/" + itername + "-results.csv"
