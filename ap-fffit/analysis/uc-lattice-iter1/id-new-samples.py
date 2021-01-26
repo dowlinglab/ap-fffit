@@ -143,13 +143,26 @@ def main():
 
     # Only take points where structure classifier is satisifed
     LH_results_pass_ucmd_clf = LH_results.loc[LH_results.ucmd_clf == True]
-    costs = LH_results_pass_ucmd_clf[['ucmd','lattice_mape']].to_numpy()
+    costs = LH_results_pass_ucmd_clf[["ucmd", "lattice_mape"]].to_numpy()
 
     # Find pareto efficient points
     result, pareto_points, dominated_points = find_pareto_set(
         costs, is_pareto_efficient
     )
-    LH_results_pass_ucmd_clf = LH_results_pass_ucmd_clf.join(pd.DataFrame(result, columns=["is_pareto"]))
+    LH_results_pass_ucmd_clf["is_pareto"] = results
+
+    # Plot pareto points vs. costs
+    g = seaborn.pairplot(
+        LH_results_pass_ucmd_clf,
+        vars=["ucmd", "lattice_mape"],
+        hue="is_pareto",
+    )
+    g.savefig("figs/pareto-mses.pdf")
+    
+    # Plot pareto points vs. params
+    g = seaborn.pairplot(LH_results_pass_ucmd_clf, vars=list(AP.param_names), hue="is_pareto")
+    g.set(xlim=(-0.1, 1.1), ylim=(-0.1, 1.1))
+    g.savefig("figs/pareto-params.pdf")
 
     # For next iteration: 1. All non-dominated points that meet the thresholds
     #                     2. "Separated" dominated points that meet the thresholds
@@ -170,7 +183,7 @@ def main():
     print(f"{len(LH_results_pass_ucmd_clf[LH_results_pass_ucmd_clf.is_pareto == True])} are non-dominated.")
     print(f"{len(dominated_points)} are dominated with ucmd < {ucmd_next_itr_threshold} and lattice_mape < {lattice_mape_next_itr_threshold}")
 
-    removal_distance = 0.578
+    removal_distance = 0.9995
     np.random.seed(distance_seed)
     discarded_points = pd.DataFrame(columns=dominated_points.columns)
     
@@ -198,12 +211,13 @@ def main():
         
     print(f"After removing similar points, we are left with {len(next_iteration_points)} final top points.")
 
+    next_iteration_points = next_iteration_points[:250]
     next_iteration_points.drop(columns=["ucmd","lattice_mape","is_pareto"], inplace=True)
 
     # Plot new points
     g = seaborn.pairplot(new_points, vars=list(AP.param_names))
     g.set(xlim=(-0.1, 1.1), ylim=(-0.1, 1.1))
-    g.savefig("figs/AP-new-points.pdf")
+    g.savefig("figs/new-points-params.pdf")
 
     # Save the final new parameters
     next_iteration_points.to_csv(csv_path + out_csv_name)
