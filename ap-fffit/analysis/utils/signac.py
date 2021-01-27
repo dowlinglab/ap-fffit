@@ -2,7 +2,7 @@ import numpy as np
 import signac
 import pandas as pd
 
-from ap import APConstants
+from .ap import APConstants
 
 
 def save_signac_results(project, param_names, csv_name):
