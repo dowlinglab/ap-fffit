@@ -1,3 +1,4 @@
+import os
 import sys
 import gpflow
 import numpy as np
@@ -55,6 +56,12 @@ df_all = prepare_df(df_csv, AP)
 
 
 def main():
+
+    # Make sure we have a folder for figures
+    try:
+        os.mkdir("figs")
+    except FileExistsError:
+        pass
 
     ###########################################################
     ####################   Fit GP models    ###################
