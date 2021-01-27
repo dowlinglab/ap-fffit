@@ -222,7 +222,7 @@ def main():
     next_iteration_points.drop(columns=["ucmd","lattice_mape","is_pareto"], inplace=True)
 
     # Plot new points
-    g = seaborn.pairplot(new_points, vars=list(AP.param_names))
+    g = seaborn.pairplot(next_iteration_points, vars=list(AP.param_names))
     g.set(xlim=(-0.1, 1.1), ylim=(-0.1, 1.1))
     g.savefig("figs/new-points-params.png", dpi=300)
 
