@@ -120,7 +120,7 @@ def main():
 
     # Apply UCMD classifier
     ucmd_pred = ucmd_clf.predict(latin_hypercube)
-   
+
     # Predict UCMD with GP model
     gp_means_ucmd, gp_vars_ucmd = ucmd_gp.predict_f(latin_hypercube)
     # Predict Lattice APE with GP model at each temperature
@@ -139,7 +139,7 @@ def main():
     LH_results = pd.DataFrame(latin_hypercube, columns=AP.param_names)
     LH_results["ucmd_clf"] = ucmd_pred.astype(np.bool_)
     LH_results["ucmd"] = gp_means_ucmd.numpy()
-    LH_results["lattice_mape"] = mean_errs 
+    LH_results["lattice_mape"] = mean_errs
 
     # Only take points where structure classifier is satisifed
     LH_results_pass_ucmd_clf = LH_results.loc[LH_results.ucmd_clf == True]
@@ -149,7 +149,7 @@ def main():
     result, pareto_points, dominated_points = find_pareto_set(
         costs, is_pareto_efficient
     )
-    LH_results_pass_ucmd_clf["is_pareto"] = results
+    LH_results_pass_ucmd_clf["is_pareto"] = result
 
     # Plot pareto points vs. costs
     g = seaborn.pairplot(
@@ -158,7 +158,7 @@ def main():
         hue="is_pareto",
     )
     g.savefig("figs/pareto-mses.pdf")
-    
+
     # Plot pareto points vs. params
     g = seaborn.pairplot(LH_results_pass_ucmd_clf, vars=list(AP.param_names), hue="is_pareto")
     g.set(xlim=(-0.1, 1.1), ylim=(-0.1, 1.1))
@@ -186,7 +186,7 @@ def main():
     removal_distance = 0.9995
     np.random.seed(distance_seed)
     discarded_points = pd.DataFrame(columns=dominated_points.columns)
-    
+
     while len(dominated_points > 0):
         # Shuffle the top parameter sets
         dominated_points = dominated_points.sample(frac=1)
@@ -195,7 +195,7 @@ def main():
         # Note: here we use a random one rather than the "best" one; we don't have
         # confidence that the GP models are more accurate than our thresholds
         next_iteration_points = next_iteration_points.append(dominated_points.iloc[[0]])
-        
+
         # Remove anything within given distance
         l1_norm = np.sum(
             np.abs(
@@ -204,11 +204,11 @@ def main():
                 ),
                 axis=1,
         )
-        
+
         points_to_remove = np.where(l1_norm < removal_distance)[0]
         discarded_points = discarded_points.append(dominated_points.iloc[points_to_remove])
         dominated_points.drop(index=dominated_points.index[points_to_remove], inplace=True)
-        
+
     print(f"After removing similar points, we are left with {len(next_iteration_points)} final top points.")
 
     next_iteration_points = next_iteration_points[:250]
