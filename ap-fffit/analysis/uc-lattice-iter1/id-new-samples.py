@@ -157,12 +157,12 @@ def main():
         vars=["ucmd", "lattice_mape"],
         hue="is_pareto",
     )
-    g.savefig("figs/pareto-mses.pdf")
+    g.savefig("figs/pareto-mses.png", dpi=300)
 
     # Plot pareto points vs. params
     g = seaborn.pairplot(LH_results_pass_ucmd_clf, vars=list(AP.param_names), hue="is_pareto")
     g.set(xlim=(-0.1, 1.1), ylim=(-0.1, 1.1))
-    g.savefig("figs/pareto-params.pdf")
+    g.savefig("figs/pareto-params.png", dpi=300)
 
     # For next iteration: 1. All non-dominated points that meet the thresholds
     #                     2. "Separated" dominated points that meet the thresholds
@@ -217,7 +217,7 @@ def main():
     # Plot new points
     g = seaborn.pairplot(new_points, vars=list(AP.param_names))
     g.set(xlim=(-0.1, 1.1), ylim=(-0.1, 1.1))
-    g.savefig("figs/new-points-params.pdf")
+    g.savefig("figs/new-points-params.png", dpi=300)
 
     # Save the final new parameters
     next_iteration_points.to_csv(csv_path + out_csv_name)
