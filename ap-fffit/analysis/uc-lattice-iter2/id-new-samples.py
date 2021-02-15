@@ -27,7 +27,7 @@ from utils.prepare_samples import prepare_df
 ############################# QUANTITIES TO EDIT #############################
 ##############################################################################
 
-iternum = 1
+iternum = 2
 gp_shuffle_seed = 588654
 clf_shuffle_seed = 19485
 distance_seed = 15
@@ -190,7 +190,7 @@ def main():
     print(f"{len(LH_results_pass_ucmd_clf[LH_results_pass_ucmd_clf.is_pareto == True])} are non-dominated.")
     print(f"{len(dominated_points)} are dominated with ucmd < {ucmd_next_itr_threshold} and lattice_mape < {lattice_mape_next_itr_threshold}")
 
-    removal_distance = 0.9995
+    removal_distance = 1.034495
     np.random.seed(distance_seed)
     discarded_points = pd.DataFrame(columns=dominated_points.columns)
 

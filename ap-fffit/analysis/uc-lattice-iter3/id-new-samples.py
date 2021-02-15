@@ -27,7 +27,7 @@ from utils.prepare_samples import prepare_df
 ############################# QUANTITIES TO EDIT #############################
 ##############################################################################
 
-iternum = 1
+iternum = 3
 gp_shuffle_seed = 588654
 clf_shuffle_seed = 19485
 distance_seed = 15
@@ -37,8 +37,9 @@ distance_seed = 15
 
 temperatures = [10, 78, 298]
 ucmd_clf_threshold = 0.8
-ucmd_next_itr_threshold = 0.35
-lattice_mape_next_itr_threshold = 2.5
+ucmd_next_itr_threshold = 0.2
+lattice_mape_next_itr_threshold = 1.5
+symm_clf_threshold = 0.001
 
 csv_path = "/scratch365/bbefort/ap-fffit/ap-fffit/analysis/csv/"
 in_csv_names = [
@@ -99,7 +100,7 @@ def main():
     ###########################################################
     ##################   Train classifers    ##################
     ###########################################################
-
+    ## Structure Classifier
     x_train, y_train, x_test, y_test = shuffle_and_split(
         df_all.loc[df_all["temperature"] == 10],
         list(AP.param_names),
@@ -117,6 +118,24 @@ def main():
     print("Testing accuracy:",metrics.accuracy_score(y_test, y_pred))
     print(metrics.confusion_matrix(y_test, y_pred))
 
+    ## Symmetry Classifier
+    x_train, y_train, x_test, y_test = shuffle_and_split(
+        df_all.loc[df_all["temperature"] == 10],
+        list(AP.param_names),
+        "abs(HB3-HB4)", 
+        shuffle_seed=clf_shuffle_seed
+    )
+    
+    y_train = np.array(y_train < symm_clf_threshold, dtype=np.int32)
+    y_test = np.array(y_test < symm_clf_threshold, dtype=np.int32)
+    symm_clf = svm.SVC(kernel="rbf")
+    symm_clf.fit(x_train, y_train)
+    y_pred = symm_clf.predict(x_train)
+    print("Training accuracy:",metrics.accuracy_score(y_train, y_pred))
+    metrics.confusion_matrix(y_train, y_pred)
+    y_pred = symm_clf.predict(x_test)
+    print("Testing accuracy:",metrics.accuracy_score(y_test, y_pred))
+    print(metrics.confusion_matrix(y_test, y_pred))
 
     ###########################################################
     ###################   Find new points   ###################
@@ -127,6 +146,9 @@ def main():
 
     # Apply UCMD classifier
     ucmd_pred = ucmd_clf.predict(latin_hypercube)
+    
+    # Apply Symmetry classifier
+    symm_pred = symm_clf.predict(latin_hypercube)
 
     # Predict UCMD with GP model
     gp_means_ucmd, gp_vars_ucmd = ucmd_gp.predict_f(latin_hypercube)
@@ -145,52 +167,53 @@ def main():
     ## Save all the results to a dataframe
     LH_results = pd.DataFrame(latin_hypercube, columns=AP.param_names)
     LH_results["ucmd_clf"] = ucmd_pred.astype(np.bool_)
+    LH_results["symm_clf"] = symm_pred.astype(np.bool_)
     LH_results["ucmd"] = gp_means_ucmd.numpy()
     LH_results["lattice_mape"] = mean_errs
 
-    # Only take points where structure classifier is satisifed
-    LH_results_pass_ucmd_clf = LH_results.loc[LH_results.ucmd_clf == True]
-    costs = LH_results_pass_ucmd_clf[["ucmd", "lattice_mape"]].to_numpy()
+    # Only take points where structure and symmetry classifiers are satisifed
+    LH_results_pass_ucmd_symm_clfs = LH_results.loc[(LH_results.ucmd_clf == True) & (LH_results.symm_clf == True)]
+    costs = LH_results_pass_ucmd_symm_clfs[["ucmd", "lattice_mape"]].to_numpy()
 
     # Find pareto efficient points
     result, pareto_points, dominated_points = find_pareto_set(
         costs, is_pareto_efficient
     )
-    LH_results_pass_ucmd_clf["is_pareto"] = result
+    LH_results_pass_ucmd_symm_clfs["is_pareto"] = result
 
     # Plot pareto points vs. costs
     g = seaborn.pairplot(
-        LH_results_pass_ucmd_clf,
+        LH_results_pass_ucmd_symm_clfs,
         vars=["ucmd", "lattice_mape"],
         hue="is_pareto",
     )
     g.savefig("figs/pareto-mses.png", dpi=300)
 
     # Plot pareto points vs. params
-    g = seaborn.pairplot(LH_results_pass_ucmd_clf, vars=list(AP.param_names), hue="is_pareto")
+    g = seaborn.pairplot(LH_results_pass_ucmd_symm_clfs, vars=list(AP.param_names), hue="is_pareto")
     g.set(xlim=(-0.1, 1.1), ylim=(-0.1, 1.1))
     g.savefig("figs/pareto-params.png", dpi=300)
 
     # For next iteration: 1. All non-dominated points that meet the thresholds
     #                     2. "Separated" dominated points that meet the thresholds
 
-    next_iteration_points = LH_results_pass_ucmd_clf.loc[
-            (LH_results_pass_ucmd_clf.is_pareto == True) &
-            (LH_results_pass_ucmd_clf.ucmd < ucmd_next_itr_threshold) &
-            (LH_results_pass_ucmd_clf.lattice_mape < lattice_mape_next_itr_threshold)
+    next_iteration_points = LH_results_pass_ucmd_symm_clfs.loc[
+            (LH_results_pass_ucmd_symm_clfs.is_pareto == True) &
+            (LH_results_pass_ucmd_symm_clfs.ucmd < ucmd_next_itr_threshold) &
+            (LH_results_pass_ucmd_symm_clfs.lattice_mape < lattice_mape_next_itr_threshold)
     ]
-    dominated_points = LH_results_pass_ucmd_clf.loc[
-            (LH_results_pass_ucmd_clf.is_pareto == False) &
-            (LH_results_pass_ucmd_clf.ucmd < ucmd_next_itr_threshold) &
-            (LH_results_pass_ucmd_clf.lattice_mape < lattice_mape_next_itr_threshold)
+    dominated_points = LH_results_pass_ucmd_symm_clfs.loc[
+            (LH_results_pass_ucmd_symm_clfs.is_pareto == False) &
+            (LH_results_pass_ucmd_symm_clfs.ucmd < ucmd_next_itr_threshold) &
+            (LH_results_pass_ucmd_symm_clfs.lattice_mape < lattice_mape_next_itr_threshold)
     ]
 
 
-    print(f"{len(LH_results_pass_ucmd_clf)} points meet the ucmd classifier.")
-    print(f"{len(LH_results_pass_ucmd_clf[LH_results_pass_ucmd_clf.is_pareto == True])} are non-dominated.")
+    print(f"{len(LH_results_pass_ucmd_symm_clfs)} points meet the ucmd and symmetry classifiers.")
+    print(f"{len(LH_results_pass_ucmd_symm_clfs[LH_results_pass_ucmd_symm_clfs.is_pareto == True])} are non-dominated.")
     print(f"{len(dominated_points)} are dominated with ucmd < {ucmd_next_itr_threshold} and lattice_mape < {lattice_mape_next_itr_threshold}")
 
-    removal_distance = 0.9995
+    removal_distance = 0.6152
     np.random.seed(distance_seed)
     discarded_points = pd.DataFrame(columns=dominated_points.columns)
 
