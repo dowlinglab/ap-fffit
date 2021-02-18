@@ -127,6 +127,10 @@ def save_signac_results(project, param_names, csv_name):
             new_row["uc_mean_distance_O"] = uc_mean_distance_O
             new_row["uc_mean_distance_N"] = uc_mean_distance_N
             new_row["uc_mean_distance_H"] = uc_mean_distance_H
+            
+            new_row["lattice_a_PE"] = 100*(job.doc.a - AP.expt_lattice_a[temperature]) / AP.expt_lattice_a[temperature]
+            new_row["lattice_b_PE"] = 100*(job.doc.b - AP.expt_lattice_b[temperature]) / AP.expt_lattice_b[temperature]
+            new_row["lattice_c_PE"] = 100*(job.doc.c - AP.expt_lattice_c[temperature]) / AP.expt_lattice_c[temperature]
 
             new_row["lattice_ape"] = 100 * np.mean(
                 [ np.abs(job.doc.a - AP.expt_lattice_a[temperature]) / AP.expt_lattice_a[temperature],

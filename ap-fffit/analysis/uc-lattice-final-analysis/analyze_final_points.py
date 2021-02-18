@@ -72,6 +72,9 @@ def main():
     #Drop NAN
     overall_best = overall_best.dropna()
     
+    #Sort by sigma Cl - this is needed because the groupby function sorts
+    overall_best = overall_best.sort_values(by='sigma_Cl')
+    
     #Add Lattice MAPE to dataframe
     overall_best['Lattice_MAPE'] = overall_best_MAPE
 
@@ -104,7 +107,7 @@ def main():
     final_results['Pareto'] = result1
     final_results_pareto = final_results[final_results['Pareto']==True]
     
-    final_results_pareto.to_csv('AP_Final_4_Pareto.csv')
+    final_results_pareto.to_csv('AP_Final_2_Pareto.csv')
 
 
 if __name__ == "__main__":
