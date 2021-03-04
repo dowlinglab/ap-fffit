@@ -1,18 +1,6 @@
-import os
 import sys
-import gpflow
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-
-from matplotlib.patches import Circle, RegularPolygon
-from matplotlib.path import Path
-from matplotlib.projections.polar import PolarAxes
-from matplotlib.projections import register_projection
-from matplotlib.spines import Spine
-from matplotlib.transforms import Affine2D
-import matplotlib.patches as mpatch
 
 from fffit.pareto import find_pareto_set, is_pareto_efficient
 sys.path.append("../")
@@ -30,7 +18,7 @@ iternum = 4
 
 temperatures = [10, 78, 298]
 
-csv_path = "/scratch365/bbefort/ap-fffit/ap-fffit/analysis/csv/"
+csv_path = "../csv/"
 in_csv_names = [
     "uc-lattice-iter" + str(i) + "-results.csv" for i in range(1, iternum+1)
 ]
@@ -107,7 +95,7 @@ def main():
     final_results['Pareto'] = result1
     final_results_pareto = final_results[final_results['Pareto']==True]
     
-    final_results_pareto.to_csv('AP_Final_2_Pareto.csv')
+    final_results_pareto.to_csv(csv_path + "ap-final-2.csv")
 
 
 if __name__ == "__main__":
