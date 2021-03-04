@@ -1,0 +1,5 @@
+lammps 07 Aug 2019 (https://lammps.sandia.gov)
+block_average (https://github.com/rsdefever/block_average)
+fffit (https://github.com/rsdefever/fffit)
+lammps_thermo (https://github.com/rsdefever/lammps_thermo)
+
