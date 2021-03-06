@@ -9,13 +9,13 @@ force fields for Ammonium Perchlorate (AP).
 Citation
 ~~~~~~~~
 This work has been submitted for review. In the meantime, you
-may cite the preprint as:
+may cite the `preprint <https://arxiv.org/abs/2103.03208>`_ as:
 
 .. code-block:: bash
 
 BJ Befort, RS DeFever, G Tow, AW Dowling, and EJ Maginn. Machine learning
 directed optimization of classical molecular modeling force fields. arXiv
-(2020).
+(2021), https://arxiv.org/abs/2103.03208
 
 
 AP Parameter Sets
