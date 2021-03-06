@@ -3,8 +3,9 @@ ap-fffit
 
 **ap-fffit** is a repository used for a case study of our
 machine learning directed force field optimization workflow
-outlined in (this preprint). Here we use the procedure to generate
-force fields for Ammonium Perchlorate (AP).
+outlined in `this preprint <https://arxiv.org/abs/2103.03208>`_.
+Here we use the procedure to generate force fields for
+Ammonium Perchlorate (AP).
 
 Citation
 ~~~~~~~~
