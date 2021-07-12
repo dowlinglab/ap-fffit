@@ -146,7 +146,7 @@ The signac workspace is created by ``ap-fffit/runs/uc-lattice-iter1/init.py``.
     python init.py
 
 The thermodynamic conditions for the simulations and the bounds for each parameter
-(LJ sigma and epsilon for C, F, and H) are defined inside ``init.py``.
+(LJ sigma and epsilon for Cl, O, N, and H) are defined inside ``init.py``.
 
 The simulation workflow is
 defined in ``ap-fffit/runs/uc-lattice-iter1/project.py``. The flow operations
