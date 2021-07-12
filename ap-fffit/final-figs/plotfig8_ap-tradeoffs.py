@@ -35,20 +35,23 @@ def main():
         label="UCMD Cl",
         alpha=0.4,
         s=20,
+        marker="v",
     )
     ax.scatter(
         range(len(df.loc[df["temperature"] == 10])),
         df.loc[df["temperature"] == 10].sort_values("uc_mean_distance")["uc_mean_distance_O"],
         label="UCMD O",
         alpha=0.4,
-        s=20,
+        s=16,
+        marker="s",
     )
     ax.scatter(
         range(len(df.loc[df["temperature"] == 10])),
         df.loc[df["temperature"] == 10].sort_values("uc_mean_distance")["uc_mean_distance_N"],
         label="UCMD N",
         alpha=0.4,
-        s=20,
+        marker="P",
+        s=16,
     )
     ax.scatter(
         range(len(df.loc[df["temperature"] == 10])),
@@ -56,6 +59,7 @@ def main():
         label="UCMD H",
         alpha=0.4,
         s=20,
+        marker="*",
     )
     ax.plot(
         range(len(df.loc[df["temperature"] == 10])),
@@ -94,7 +98,7 @@ def main():
     fig.subplots_adjust(left=0.2, bottom=0.2, top=0.8, right=0.8)
 
     fig.legend(fontsize=12, loc="lower right", bbox_to_anchor=(0.9,1), bbox_transform=ax.transAxes, ncol=2)
-    fig.savefig("pdfs/fig_ap-tradeoffs.pdf")
+    fig.savefig("pdfs/fig8-ap-tradeoffs.pdf")
 
 
 if __name__ == "__main__":

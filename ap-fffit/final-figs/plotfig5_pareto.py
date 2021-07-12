@@ -20,6 +20,7 @@ df_nondom = pd.read_csv("../analysis/csv/ap-final-2.csv", index_col=0)
 means = df_dom.groupby(by=list(AP.param_names))["lattice_ape"].mean()
 df_dom = df_dom.join(means, on=list(AP.param_names), rsuffix="_mean")
 df_dom = df_dom[df_dom.temperature == 10]
+df_dom.drop(index=[101, 167], inplace=True)  # Lazy way of removing two dominated points
 
 def main():
 
@@ -43,6 +44,7 @@ def main():
         alpha=1.0,
         s=90,
         c="C5",
+        marker='x',
     )
 
     ax.tick_params("both", direction="in", which="both", length=4, labelsize=18, pad=6)
@@ -71,7 +73,7 @@ def main():
 
     ax.set_aspect(1.0/ax.get_data_ratio(), adjustable="box")
     fig.tight_layout()
-    fig.savefig("pdfs/figsi-pareto.pdf")
+    fig.savefig("pdfs/fig5-ap-pareto.pdf")
 
 
 if __name__ == "__main__":
