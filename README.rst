@@ -14,7 +14,7 @@ may cite the `preprint <https://arxiv.org/abs/2103.03208>`_ as:
 
 .. code-block:: bash
 
-    BJ Befort, RS DeFever, G Tow, AW Dowling, and EJ Maginn. Machine learning
+    BJ Befort, RS DeFever, GM Tow, AW Dowling, and EJ Maginn. Machine learning
     directed optimization of classical molecular modeling force fields. arXiv
     (2021), https://arxiv.org/abs/2103.03208
 
