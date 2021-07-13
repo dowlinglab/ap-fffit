@@ -44,7 +44,7 @@ Nonetheless, all of the results from our molecular simulations are saved
 under ``ap-fffit/analysis/lattice-iterZZ-results.csv``, where
 ``ZZ`` is the iteration number.
 
-Surrogate modeling
+Surrogate Modeling
 ##################
 All of the scripts for the surrogate modeling are provided in
 ``ap-fffit/analysis``, following the same naming structure as
@@ -56,7 +56,7 @@ All scripts required to generate the primary figures in the
 manuscript are reported under ``ap-fffit/final-figs`` and the
 associated PDF files are located under ``ap-fffit/final-figs/pdfs``.
 
-Using this package
+Using This Package
 ~~~~~~~~~~~~~~~~~~
 
 Installation
@@ -116,7 +116,7 @@ An example of the procedure is provided below:
     pip install .
     cd ../
 
-Compiling the analysis codes
+Compiling the Analysis Codes
 #############################
 
 There are two fortran analysis codes under ``ap-fffit/runs/codes`` that
@@ -127,7 +127,7 @@ must be compiled. You can use ``ifort`` or ``gfortran``. For example:
     ifort calc_htweaked_pc_uc.f90 -o calc_htweaked_pc_uc -no-wrap-margin
     ifort calc_hbond_hangle.f90 -o calc_hbond_hangle -no-wrap-margin
 
-AP force field optimization
+AP Force Field Optimization
 ###########################
 
 **NOTE**: We use signac and signac flow (`<https://signac.io/>`_)
