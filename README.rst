@@ -76,11 +76,11 @@ taking packages from ``conda-forge``.
 
 Running the simulations will also require an installation of LAMMPS.
 This can be installed separately (see installation instructions
-`here <https://docs.lammps.org/Install.html>`_ )
+`here <https://docs.lammps.org/Install.html>`_).
 
 **WARNING**: Cloning the ``ap-fffit`` repository will take some time
-and ~1.5 GB of disk space since it contains the Latin hypercube
-that have ~1e6 parameter sets each.
+and ~1.5 GB of disk space since it contains the Latin hypercubes
+that have ~1e6 parameter sets.
 
 An example of the procedure is provided below:
 
